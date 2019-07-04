@@ -3,45 +3,47 @@ var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l
 
 var wins = 0;
 var losses = 0;
-var guessLeft = 9;
-var letterUser = [];
-var eachofLetters = null;
+var left = 9;
+var guesses = 9;
+var guessesSoFar = [];
+var psychicLetter;
 
-//computerGuess variable equal to a random choice
-var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+var newLetter = function() {
+    psychicLetter = alphabet[Math.floor(Math.random() * alphabet.lenght)];
+};
 
-function farUserGuesses() {
-    document.querySelector("#letter").innerHTML = "your Guesses So far: " + letterUser.join(' ');
+var soFar = function() {
+    document.getElementById("guesses").innerHTML = "Guesses so far: " + guessesSoFar.join(",");
+};
 
+var guessesLeft = function(){
+    document.getElementById("left").innerHTML = "Guesses Left: " + left;
+};
+
+var neGame = function() {
+    guessedLetters = [];
+    left = 9;
+    newLetter();
+    guessesLeft();
+    soFar();
 }
 
-countGuessLeft();
-var restart = function() {
-    guessLeft = 9;
-    letterUser = [];
-    var computerGuess = computerChoices[Math.floor(Math,random() * computerChoices.lenght)];
+document.onkeyup =function(event) {
+    var userGuess = event.key;
+    left--;
+    guessesSoFar.push(userGuess);
+    soFar();
+    guessesLeft();
+    if (left > 0) {
+        if (userGuess == psychicLetter) {
+            wins++;
+            document.getElementById("wins").innerHTML = "wins" + wins;
+            newGame();
 
-}
-//when user guesses a key
-document.onkeyup = function(event) {
-    guessLeft--;
-
- var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
-
-
- letterUser.push(userGuess) 
- countGuessLeft();
- farUserGuesses();
-
- if (userGuess === computerGuess) {
-     wins++;
-     documentquerySelector("wins").innerHTML = "Wins" + wins;
-     restart();
- }
-
- else if (guessesLeft === 0){
-     losses++;
-     document.querySelector("loser").innerHTML = "Loses" + losses;
-     restart()
- }
+        }
+    } else if (left == 0) {
+        losses++;
+        document.getElementById("losses").innerHTML = "Losses:" + losses;
+        newGame;
+    }
 };
